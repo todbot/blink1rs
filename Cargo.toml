@@ -1,0 +1,29 @@
+[package]
+name = "blink1rs"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "MIT"
+description = "Control the blink(1) USB RGB LED. Simple sync API over hidapi, with hardware watchdog support for alerting."
+repository = "https://github.com/todbot/blink1rs"
+homepage = "https://github.com/todbot/blink1rs"
+documentation = "https://docs.rs/blink1rs"
+readme = "README.md"
+keywords = ["blink1", "led", "usb", "hid", "notification"]
+categories = ["hardware-support", "command-line-utilities"]
+exclude = [".github/"]
+
+[dependencies]
+hidapi = { version = "2.6", features = ["macos-shared-device"] }
+thiserror = "2"
+clap = { version = "4", features = ["derive"], optional = true }
+anyhow = { version = "1", optional = true }
+
+[features]
+default = ["cli"]
+cli = ["dep:clap", "dep:anyhow"]
+
+[[bin]]
+name = "blink1rs"
+path = "src/bin/blink1rs.rs"
+required-features = ["cli"]
