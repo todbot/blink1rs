@@ -31,6 +31,15 @@ pub enum Error {
     #[error("device returned an unexpected response")]
     BadResponse,
 
+    /// This hardware generation cannot do what was asked.
+    #[error("{op} is not supported on {kind}")]
+    Unsupported {
+        /// The operation that was attempted.
+        op: &'static str,
+        /// The generation of the device it was attempted on.
+        kind: crate::DeviceKind,
+    },
+
     /// [`Blink1::watchdog_tickle`](crate::Blink1::watchdog_tickle) was called
     /// before [`Blink1::watchdog_enable`](crate::Blink1::watchdog_enable).
     #[error("watchdog_tickle called before watchdog_enable")]

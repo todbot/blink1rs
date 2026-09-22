@@ -204,7 +204,10 @@ impl Blink1 {
     /// unreliable; this crate rejects it rather than returning junk.
     pub fn read_rgb(&mut self, led: Led) -> Result<Color> {
         if !self.kind.can_read_rgb() {
-            return Err(Error::BadResponse);
+            return Err(Error::Unsupported {
+                op: "read_rgb",
+                kind: self.kind,
+            });
         }
         let mut buf = protocol::read_rgb_req(led);
         self.transport.recv(&mut buf)?;
@@ -443,7 +446,13 @@ mod tests {
     #[test]
     fn mk1_refuses_rgb_readback() {
         let (mut b, t) = mock(DeviceKind::Mk1);
-        assert!(b.read_rgb(Led::All).is_err());
+        assert!(matches!(
+            b.read_rgb(Led::All),
+            Err(Error::Unsupported {
+                op: "read_rgb",
+                kind: DeviceKind::Mk1
+            })
+        ));
         assert!(t.sent().is_empty(), "nothing should reach the device");
     }
 
