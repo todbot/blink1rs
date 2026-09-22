@@ -1,5 +1,11 @@
 # blink1rs
 
+[![crates.io][crates-badge]][crates-url]
+[![docs.rs][docs-badge]][docs-url]
+[![CI][ci-badge]][ci-url]
+[![MSRV][msrv-badge]][crates-url]
+[![license][license-badge]][license-url]
+
 Control the [blink(1)](https://blink1.thingm.com/) USB RGB LED from Rust.
 
 A small synchronous API over `hidapi`, aimed at wiring a blink(1) into
@@ -166,3 +172,13 @@ single-threaded: there is one HID handle per device.
 ## License
 
 MIT
+
+[crates-badge]: https://img.shields.io/crates/v/blink1rs.svg
+[crates-url]: https://crates.io/crates/blink1rs
+[docs-badge]: https://docs.rs/blink1rs/badge.svg
+[docs-url]: https://docs.rs/blink1rs
+[ci-badge]: https://github.com/todbot/blink1rs/actions/workflows/ci.yml/badge.svg
+[ci-url]: https://github.com/todbot/blink1rs/actions/workflows/ci.yml
+[msrv-badge]: https://img.shields.io/crates/msrv/blink1rs.svg
+[license-badge]: https://img.shields.io/crates/l/blink1rs.svg
+[license-url]: LICENSE
