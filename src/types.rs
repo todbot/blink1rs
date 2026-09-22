@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Tod Kurt
+// SPDX-License-Identifier: MIT
+
 //! Small value types used across the API.
 
 use std::time::Duration;

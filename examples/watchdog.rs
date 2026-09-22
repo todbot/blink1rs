@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Tod Kurt
+// SPDX-License-Identifier: MIT
+
 //! Hold the light green while this process lives; the device turns itself
 //! red on its own once the tickles stop.
 //!

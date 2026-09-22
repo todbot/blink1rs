@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Tod Kurt
+// SPDX-License-Identifier: MIT
+
 //! The [`Blink1`] handle and every command it supports.
 
 use crate::color::Color;

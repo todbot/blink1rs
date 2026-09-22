@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Tod Kurt
+// SPDX-License-Identifier: MIT
+
 //! Wire format: pure buffer builders and response parsers, no I/O.
 //!
 //! Every layout here is transcribed from `blink1-lib.c` in the blink1-tool

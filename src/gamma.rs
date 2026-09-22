@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Tod Kurt
+// SPDX-License-Identifier: MIT
+
 //! Gamma correction, off by default.
 
 /// `255 * (x/255)^(1/0.45)`, transcribed from `blink1-lib.c` `GammaE[]`,

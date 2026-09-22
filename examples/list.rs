@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Tod Kurt
+// SPDX-License-Identifier: MIT
+
 //! Print every attached blink(1).
 
 fn main() -> Result<(), blink1rs::Error> {

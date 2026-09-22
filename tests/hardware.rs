@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Tod Kurt
+// SPDX-License-Identifier: MIT
+
 //! Tests that need a blink(1) plugged in.
 //!
 //! All `#[ignore]`, so a plain `cargo test` skips them. One device means one

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Tod Kurt
+// SPDX-License-Identifier: MIT
+
 //! Flash through the states you would use for a build status.
 
 use blink1rs::{Blink1, Color};

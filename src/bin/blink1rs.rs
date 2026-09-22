@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Tod Kurt
+// SPDX-License-Identifier: MIT
+
 //! Command-line control of a blink(1).
 
 use anyhow::{bail, Context, Result};

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Tod Kurt
+// SPDX-License-Identifier: MIT
+
 //! Control the [blink(1)](https://blink1.thingm.com/) USB RGB LED.
 //!
 //! A small synchronous API over `hidapi`, aimed at wiring a blink(1) into

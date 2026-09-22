@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Tod Kurt
+// SPDX-License-Identifier: MIT
+
 //! How reports reach the device.
 //!
 //! Kept private: a public transport trait would be public surface to keep
