@@ -43,7 +43,7 @@ Library only, without the CLI and its dependencies:
 
 ```toml
 [dependencies]
-blink1rs = { version = "0.1", default-features = false }
+blink1rs = { version = "0.2", default-features = false }
 ```
 
 ## The watchdog
