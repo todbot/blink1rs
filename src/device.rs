@@ -115,10 +115,11 @@ impl Blink1 {
 
     /// Open a specific device returned by [`Blink1::list`].
     ///
-    /// The device list is re-read, so a device unplugged since the listing
-    /// gives [`Error::NotFound`] rather than opening whatever took its place.
+    /// Matched by serial against a fresh listing, not by the stored path:
+    /// HID paths get reused, so a device unplugged since the listing gives
+    /// [`Error::NotFound`] rather than opening whatever took its place.
     pub fn open_info(info: &DeviceInfo) -> Result<Blink1> {
-        Blink1::open_with(&hidapi::HidApi::new()?, info)
+        Blink1::open_serial(&info.serial)
     }
 
     /// Enumerating and opening share one `HidApi`, so the device list cannot
@@ -194,11 +195,19 @@ impl Blink1 {
             .send(&protocol::fade(color, duration, led, self.gamma))
     }
 
-    /// Read back the last colour *sent* to the device.
+    /// Read back the colour the device is showing.
     ///
-    /// This is the fade target, not a live sample: during a fade it already
-    /// reports the destination colour. If gamma is on, the value returned is
-    /// post-correction and will not match what you passed in.
+    /// A live sample, not the fade target: read mid-fade and you get an
+    /// interpolated value, so let a fade finish before comparing.
+    ///
+    /// `led` is ignored: the device answers with LED 1's colour whatever
+    /// index is asked for, and reports no error, so LED 2 cannot be read
+    /// back at all.
+    ///
+    /// Both of those were checked on mk3 firmware 304; mk2 is untested.
+    ///
+    /// If gamma is on, the value returned is post-correction and will not
+    /// match what you passed in.
     ///
     /// Not supported on mk1, whose only read path `blink1-lib` itself marks
     /// unreliable; this crate rejects it rather than returning junk.

@@ -5,7 +5,24 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog][kac], and this project adheres
 to [Semantic Versioning][semver].
 
-## [Unreleased]
+## [0.2.0] - 2026-09-22
+
+### Fixed
+
+- `open_info` now matches the `DeviceInfo` by serial against a fresh
+  listing, as its documentation always claimed. It opened the stored HID
+  path directly, so a device unplugged since the listing gave
+  `Error::Hid` instead of `Error::NotFound`, and a reused path could open
+  a different device. `DeviceInfo::path` no longer takes part in opening:
+  a hand-built `DeviceInfo` whose serial is not attached is now
+  `Error::NotFound` even if its path is live.
+- `read_rgb`'s documentation described the wrong behaviour on two counts,
+  both checked against an mk3 on firmware 304. It returns a live sample of
+  the LED, not the fade target, so a read during a fade gives an
+  interpolated value. And the `led` argument is ignored by that firmware,
+  which answers with LED 1's colour for any index and reports no error, so
+  LED 2 cannot be read back. No code change: the crate sends what
+  `blink1-lib` sends.
 
 ## [0.1.1] - 2026-09-22
 

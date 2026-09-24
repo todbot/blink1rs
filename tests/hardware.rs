@@ -12,7 +12,7 @@
 //!
 //! Every test leaves the LED off.
 
-use blink1rs::{Blink1, Color, DeviceKind, Led, OnTimeout};
+use blink1rs::{Blink1, Color, DeviceInfo, DeviceKind, Error, Led, OnTimeout};
 use std::thread::sleep;
 use std::time::Duration;
 
@@ -47,6 +47,36 @@ fn lists_and_opens_the_same_device() {
     assert_eq!(b.serial(), found[0].serial, "open() is list()[0]");
     assert_eq!(b.kind(), DeviceKind::from_serial(b.serial()));
     quiesce(b);
+}
+
+/// `open_info` identifies the device by serial, not by the path recorded
+/// when it was listed.
+#[test]
+#[ignore = "needs hardware"]
+fn open_info_follows_the_serial_not_the_path() {
+    let found = Blink1::list().unwrap();
+    let info = found.first().expect("no blink(1) attached").clone();
+
+    let stale_path = DeviceInfo {
+        path: format!("{}-gone", info.path),
+        ..info.clone()
+    };
+    let b = Blink1::open_info(&stale_path).unwrap();
+    assert_eq!(
+        b.serial(),
+        info.serial,
+        "a stale path must not stop the open"
+    );
+    quiesce(b);
+
+    let gone = DeviceInfo {
+        serial: "DEADBEEF".into(),
+        ..info
+    };
+    assert!(
+        matches!(Blink1::open_info(&gone), Err(Error::NotFound)),
+        "an absent serial must not open whatever is attached"
+    );
 }
 
 #[test]
@@ -105,8 +135,8 @@ fn gamma_on_changes_what_the_device_reports() {
     quiesce(b);
 }
 
-/// `'r'` reports the last colour *sent*, not a live sample, so this can only
-/// check the destination. Watch the LED to see the fade itself.
+/// `'r'` samples the LED live, so the read waits out the 600ms fade;
+/// reading earlier lands on an interpolated value partway to white.
 #[test]
 #[ignore = "needs hardware"]
 fn fade_reaches_its_target() {
@@ -183,6 +213,10 @@ fn play_and_stop_report_their_state() {
     quiesce(b);
 }
 
+/// Only half of this is checkable: mk3 firmware 304 ignores the LED index on
+/// read and always reports LED 1, so LED 2's colour cannot be read back.
+/// Writing LED 2 *second* still proves the two are addressed apart, because
+/// an ignored index on write would leave LED 1 reading blue.
 #[test]
 #[ignore = "needs hardware"]
 fn per_led_addressing_drives_the_two_leds_apart() {
@@ -197,7 +231,6 @@ fn per_led_addressing_drives_the_two_leds_apart() {
     sleep(Duration::from_millis(100));
 
     assert_eq!(b.read_rgb(Led::N(1)).unwrap(), Color::RED);
-    assert_eq!(b.read_rgb(Led::N(2)).unwrap(), Color::BLUE);
     quiesce(b);
 }
 
@@ -215,8 +248,9 @@ fn save_patterns_survives_the_usb_stall() {
 }
 
 /// Slow: really waits for the device to act by itself.
-/// Observed through `play_state`, not colour: `'r'` reports the last colour
-/// the *host* sent, so it would still say green after the device acted.
+/// Observed through `play_state` rather than colour: it shows that the
+/// watchdog started the pattern, without depending on what colour the
+/// pattern had reached when sampled.
 #[test]
 #[ignore = "needs hardware, takes ~8s"]
 fn watchdog_fires_on_its_own() {
