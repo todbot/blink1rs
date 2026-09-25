@@ -35,7 +35,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libudev-dev pkg-config
       - uses: Swatinem/rust-cache@v2
       # Hardware tests are #[ignore] and skip themselves here.
-      - run: cargo test --all-features
+      - run: cargo test --all-features --locked
 
   lint:
     runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - run: sudo apt-get update && sudo apt-get install -y libudev-dev pkg-config
       - uses: Swatinem/rust-cache@v2
-      - run: cargo test --no-default-features --lib
+      - run: cargo test --no-default-features --lib --locked
 
   publish-dry-run:
     runs-on: ubuntu-latest
